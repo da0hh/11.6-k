@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string encrypt_caesar(string text, int code) {
+    string result = "";
+    code = code % 26;
+
+    for (int i = 0; i < text.length(); i++) {
+        if (text[i] >= 'A' && text[i] <= 'Z') {
+            char encrypted = (text[i] - 'A' + code) % 26 + 'A';
+            result += encrypted;
+        }
+        else if (text[i] >= 'a' && text[i] <= 'z') {
+            char encrypted = (text[i] - 'a' + code) % 26 + 'a';
+            result += encrypted;
+        }
+        else {
+            result += text[i];
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    string text; int code;
+    cout << "Text: "; getline(cin, text);
+    cout << "Code: "; cin >> code;
+    cout << encrypt_caesar(text, code) << endl;
+}
