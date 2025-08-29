@@ -1,0 +1,86 @@
+#include <iostream>
+
+using namespace std;
+
+bool first_Half(string firstHalf) {
+    int counterDog = 0; string available = "!#$%&\'*+-/=?^_`{|}~";
+    string result = "";
+    if (firstHalf.length() > 64) {
+        return false;
+    }
+    if (firstHalf[0] == '.') {
+        return false;
+    }
+    char symbolDog = 64;
+
+    for (int i = 0; i != firstHalf.length(); i++) {
+        if (firstHalf[i] == '@') {
+            counterDog++;
+            result += firstHalf[i];
+        }
+        else if (firstHalf[i] == '!') {
+            result += firstHalf[i];
+        }
+        else if (firstHalf[i] <= 'A' and firstHalf[i] >= 'Z' or firstHalf[i] <= 'a' and firstHalf[i] <= 'z') {
+            result += firstHalf[i];
+        }
+        else {
+            return false;
+        }
+        if (counterDog > 1) {
+            return false;
+        }
+        else { break; }
+    }
+    return true;
+}
+
+bool checkTruthEmail(string email) {
+    string result = "";
+    first_Half(email);
+    if (first_Half(email) == true) {
+        string tryEmail = email.substr('@');
+        size_t pos = email.find('@');
+        size_t pos = email.find('@');
+        if (pos == string::npos){
+            
+        }
+        string first_part = email.substr(0, pos);
+
+
+        for (int i = 0; i < tryEmail.length(); i++) {
+            if (isdigit(tryEmail[i])) {
+                continue;
+            }
+            else if (islower(tryEmail[i])) {
+                continue;
+            }
+            else if (isupper(tryEmail[i])) {
+                continue;
+            }
+            else if (tryEmail[i] == '-') {
+                continue;
+            }
+            else if (tryEmail[i] == '.') {
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}
+
+int main() {
+    string email;
+    cout << "Your email: "; cin >> email;
+    bool test = checkTruthEmail(email);
+    if (test == true) {
+        cout << "Yes";
+    }
+    else { cout << "No"; }
+}
