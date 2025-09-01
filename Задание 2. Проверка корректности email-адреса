@@ -1,86 +1,62 @@
 #include <iostream>
+#include <string>
+#include <cctype>
 
 using namespace std;
 
-bool first_Half(string firstHalf) {
-    int counterDog = 0; string available = "!#$%&\'*+-/=?^_`{|}~";
-    string result = "";
-    if (firstHalf.length() > 64) {
-        return false;
-    }
-    if (firstHalf[0] == '.') {
-        return false;
-    }
-    char symbolDog = 64;
+bool checkFirstPart(string firstPart) {
 
-    for (int i = 0; i != firstHalf.length(); i++) {
-        if (firstHalf[i] == '@') {
-            counterDog++;
-            result += firstHalf[i];
-        }
-        else if (firstHalf[i] == '!') {
-            result += firstHalf[i];
-        }
-        else if (firstHalf[i] <= 'A' and firstHalf[i] >= 'Z' or firstHalf[i] <= 'a' and firstHalf[i] <= 'z') {
-            result += firstHalf[i];
-        }
-        else {
-            return false;
-        }
-        if (counterDog > 1) {
-            return false;
-        }
-        else { break; }
+    if (firstPart.length() < 1 || firstPart.length() > 64) return false;
+    if (firstPart[0] == '.' || firstPart.back() == '.') return false;
+    for (size_t i = 0; i < firstPart.length() - 1; i++) {
+        if (firstPart[i] == '.' && firstPart[i + 1] == '.') return false;
+    }
+    for (char c : firstPart) {
+        if (isalnum(c)) continue; 
+        if (c == '.' || c == '!' || c == '#' || c == '$' || c == '%' || c == '&' || c == '\'' ||
+            c == '*' || c == '+' || c == '/' || c == '=' || c == '?' || c == '^' ||
+            c == '`' || c == '{' || c == '|' || c == '}' || c == '-' || c == '_' || c == '~') continue;
+        return false;
     }
     return true;
 }
 
-bool checkTruthEmail(string email) {
-    string result = "";
-    first_Half(email);
-    if (first_Half(email) == true) {
-        string tryEmail = email.substr('@');
-        size_t pos = email.find('@');
-        size_t pos = email.find('@');
-        if (pos == string::npos){
-            
-        }
-        string first_part = email.substr(0, pos);
-
-
-        for (int i = 0; i < tryEmail.length(); i++) {
-            if (isdigit(tryEmail[i])) {
-                continue;
-            }
-            else if (islower(tryEmail[i])) {
-                continue;
-            }
-            else if (isupper(tryEmail[i])) {
-                continue;
-            }
-            else if (tryEmail[i] == '-') {
-                continue;
-            }
-            else if (tryEmail[i] == '.') {
-                continue;
-            }
-            else {
-                break;
-            }
-        }
+bool checkSecondPart(string secondPart) {
+    if (secondPart.length() < 1 || secondPart.length() > 63) return false;
+    if (secondPart[0] == '.' || secondPart.back() == '.') return false;
+    for (size_t i = 0; i < secondPart.length() - 1; i++) {
+        if (secondPart[i] == '.' && secondPart[i + 1] == '.') return false;
     }
-    else {
+    for (char c : secondPart) {
+        if (isalnum(c)) continue; 
+        if (c == '.' || c == '-') continue;  
         return false;
     }
     return true;
+}
+
+bool isValidEmail(string email) {
+    size_t atPos = email.find('@');
+    if (atPos == string::npos || email.find('@', atPos + 1) != string::npos) {
+        return false;
+    }
+
+    string firstPart = email.substr(0, atPos);
+    string secondPart = email.substr(atPos + 1);
+
+    return checkFirstPart(firstPart) && checkSecondPart(secondPart);
 }
 
 int main() {
+    setlocale(LC_ALL, "RU");
     string email;
-    cout << "Your email: "; cin >> email;
-    bool test = checkTruthEmail(email);
-    if (test == true) {
-        cout << "Yes";
+    cout << "Введите email: "; getline(cin, email);
+
+    if (isValidEmail(email)) {
+        cout << "Yes" << endl;
     }
-    else { cout << "No"; }
+    else {
+        cout << "No" << endl;
+    }
+    return 0;
 }
