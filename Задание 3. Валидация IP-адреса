@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string get_address_part(string ip, int part_index) {
+    int start = 0;
+    int dot_count = 0;
+    for (int i = 0; i < ip.length(); i++) {
+        if (ip[i] == '.') {
+            dot_count++;
+            if (dot_count == part_index) {
+                start = i + 1;
+                break;
+            }
+        }
+    }
+    string result = "";
+    for (int i = start; i < ip.length(); i++) {
+        if (ip[i] == '.') break;
+        result += ip[i];
+    }
+    return result;
+}
+
+bool is_valid_part(string part) {
+    if (part.empty()) return false;
+    if (part.length() > 1 && part[0] == '0') return false;
+    for (char c : part) {
+        if (c < '0' || c > '9') return false;
+    }
+    int num = stoi(part);
+    return num >= 0 && num <= 255;
+}
+
+bool is_valid_ip(string ip) {
+    int dot_count = 0;
+    for (char c : ip) {
+        if (c == '.') dot_count++;
+    }
+    if (dot_count != 3) return false;
+    for (int i = 0; i < 4; i++) {
+        string part = get_address_part(ip, i);
+        if (!is_valid_part(part)) return false;
+    }
+    return true;
+}
+
+int main() {
+    setlocale(LC_ALL, "RU");
+    string ip;
+    cout << "Your ip adress: "; cin >> ip;
+    if (is_valid_ip(ip)) {
+        cout << "Valid";
+    }
+    else {
+        cout << "Invalid";
+    }
+    return 0;
+}
